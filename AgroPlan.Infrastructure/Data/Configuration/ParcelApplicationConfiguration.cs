@@ -12,8 +12,8 @@ namespace AgroPlan.Infrastructure.Data.Configuration
         public void Configure(EntityTypeBuilder<ParcelApplication> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Parcel);
-            builder.Property(x => x.Application);
+            builder.HasOne(x => x.Parcel);
+            builder.HasOne(x => x.Application);
         }
     }
 }

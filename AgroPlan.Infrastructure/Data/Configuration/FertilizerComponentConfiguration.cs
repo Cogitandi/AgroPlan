@@ -13,7 +13,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.PercentageContent);
-            builder.Property(x => x.ChemicalElement);
+            builder.HasOne(x => x.ChemicalElement);
             builder.HasOne(x => x.Fertilizer);
         }
     }
