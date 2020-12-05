@@ -10,43 +10,8 @@ using AgroPlan.Infrastructure.Data;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class ApplicationKindRepository : IApplicationKindRepository
+    public class ApplicationKindRepository : RepositoryBase<ApplicationKind>
     {
-        private readonly DatabaseContext _context;
-
-        public ApplicationKindRepository(DatabaseContext context)
-        {
-            _context = context;
-        }
-
-        public async Task Add(ApplicationKind obj)
-        {
-            _context.ApplicationKinds.Add(obj);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task Delete(ApplicationKind obj)
-        {
-            _context.ApplicationKinds.Remove(obj);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<ApplicationKind>> GetAll()
-        {
-            return await _context.ApplicationKinds.ToListAsync();
-        }
-
-        public async Task<ApplicationKind> GetById(Guid id)
-        {
-            return await _context.ApplicationKinds
-                .Where(x => x.Id == id)
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task Update(ApplicationKind obj)
-        {
-            _context.ApplicationKinds.Update(obj);
-            await _context.SaveChangesAsync();
-        }
+        public ApplicationKindRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }
 }

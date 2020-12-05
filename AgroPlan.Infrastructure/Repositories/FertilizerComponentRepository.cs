@@ -1,10 +1,13 @@
-﻿using System;
+﻿using AgroPlan.Core.Domain;
+using AgroPlan.Infrastructure.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    class FertilizerComponentRepository
+    public class FertilizerComponentRepository : RepositoryBase<FertilizerComponent>
     {
+        public FertilizerComponentRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }
 }

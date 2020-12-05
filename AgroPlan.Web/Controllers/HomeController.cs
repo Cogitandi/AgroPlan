@@ -1,4 +1,6 @@
-﻿using AgroPlan.Web.Models;
+﻿using AgroPlan.Core.Domain;
+using AgroPlan.Core.Repositories;
+using AgroPlan.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,7 +15,7 @@ namespace AgroPlan.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logge)
         {
             _logger = logger;
         }
@@ -23,10 +25,6 @@ namespace AgroPlan.Web.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

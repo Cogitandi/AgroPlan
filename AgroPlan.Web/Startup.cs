@@ -1,5 +1,7 @@
 using AgroPlan.Core.Domain;
+using AgroPlan.Core.Repositories;
 using AgroPlan.Infrastructure.Data;
+using AgroPlan.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -57,6 +59,8 @@ namespace AgroPlan.Web
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
+
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

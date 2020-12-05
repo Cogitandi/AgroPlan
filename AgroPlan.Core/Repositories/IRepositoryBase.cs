@@ -8,7 +8,7 @@ namespace AgroPlan.Core.Repositories
 {
     public interface IRepositoryBase<T>
     {
-        Task<IEnumerable<T>> GetAll();
+        IEnumerable<T> GetAll();
         Task<T> GetById(Guid id);
         Task Add(T obj);
         Task Delete(T obj);
