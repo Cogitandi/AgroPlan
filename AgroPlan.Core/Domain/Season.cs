@@ -12,5 +12,7 @@ namespace AgroPlan.Core.Domain
         public int EndYear { get; set; }
 
         public ApplicationUser User { get; set; }
+
+        public IEnumerable<Application> Applications { get; set; }
     }
 }

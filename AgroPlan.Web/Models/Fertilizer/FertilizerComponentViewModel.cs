@@ -10,7 +10,7 @@ namespace AgroPlan.Web.Models.Fertilizer
     {
 
         [Display(Name = "Nazwa")]
-        public String Name { get; set; }
+        public Guid Id { get; set; }
         [Required]
         [Display(Name = "Zawartość")]
         public int PercentageContent { get; set; }

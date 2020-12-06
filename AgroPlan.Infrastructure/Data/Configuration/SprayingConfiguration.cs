@@ -14,6 +14,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name);
             builder.Property(x => x.ReasonForUse);
+            builder.HasMany(x => x.SprayingComponents);
         }
     }
 }

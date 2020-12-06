@@ -15,6 +15,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.Property(x => x.Number);
             builder.Property(x => x.CultivatedArea);
             builder.HasOne(x => x.Field);
+            builder.HasMany(x => x.Treatments);
         }
     }
 }

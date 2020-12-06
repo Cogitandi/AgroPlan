@@ -18,6 +18,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.HasOne(x => x.Spraying);
             builder.HasOne(x => x.Fertilization);
             builder.HasOne(x => x.Sowing);
+            builder.HasMany(x => x.ParcelCoveredByTreatments);
         }
     }
 }

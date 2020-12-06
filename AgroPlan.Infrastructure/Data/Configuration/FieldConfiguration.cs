@@ -15,6 +15,8 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.Property(x => x.Number);
             builder.Property(x => x.Name);
             builder.HasOne(x => x.User);
+            builder.HasMany(x => x.Parcels);
+            builder.HasMany(x => x.YearPlans);
         }
     }
 }

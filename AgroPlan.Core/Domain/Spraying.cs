@@ -9,5 +9,7 @@ namespace AgroPlan.Core.Domain
         public Guid Id { get; set; }
         public String Name { get; set; }
         public String ReasonForUse { get; set; }
+
+        public IEnumerable<SprayingComponent> SprayingComponents { get; set; }
     }
 }

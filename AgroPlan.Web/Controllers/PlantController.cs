@@ -26,8 +26,7 @@ namespace AgroPlan.Web.Controllers
 
         public IActionResult Index()
         {
-            var plantList = _plantRepository
-                .GetAll();
+            var plantList = _plantRepository.GetAll();
 
             var model = plantList.Select(x => new PlantListViewModel()
             {
@@ -42,6 +41,7 @@ namespace AgroPlan.Web.Controllers
             return PartialView(new CreatePlantViewModel());
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePlantViewModel model)
         {
             if(!ModelState.IsValid)
@@ -81,6 +81,7 @@ namespace AgroPlan.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditPlantViewModel model)
         {
             if (!ModelState.IsValid)

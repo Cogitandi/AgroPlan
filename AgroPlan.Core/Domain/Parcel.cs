@@ -11,5 +11,6 @@ namespace AgroPlan.Core.Domain
         public int CultivatedArea { get; set; }
         
         public Field Field { get; set; }
+        public IEnumerable<Treatment> Treatments { get; set; }
     }
 }

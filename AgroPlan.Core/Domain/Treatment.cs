@@ -14,5 +14,7 @@ namespace AgroPlan.Core.Domain
         public Spraying Spraying { get; set; }
         public Fertilization Fertilization { get; set; }
         public Sowing Sowing { get; set; }
+
+        public IEnumerable<ParcelCoveredByTreatment> ParcelCoveredByTreatments { get; set; }
     }
 }

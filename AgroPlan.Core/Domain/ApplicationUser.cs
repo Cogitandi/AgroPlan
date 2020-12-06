@@ -11,5 +11,9 @@ namespace AgroPlan.Core.Domain
         public DateTime CreateDate { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
+
+        public IEnumerable<MostCommonlyGrownPlant> MostCommonlyGrownPlants { get; set; }
+        public IEnumerable<Season> Seasons { get; set; }
+        public IEnumerable<Field> Fields { get; set; }
     }
 }

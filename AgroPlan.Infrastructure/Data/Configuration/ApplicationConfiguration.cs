@@ -14,6 +14,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Season);
             builder.HasOne(x => x.ApplicationKind);
+            builder.HasMany(x => x.ParcelApplications);
         }
     }
 }

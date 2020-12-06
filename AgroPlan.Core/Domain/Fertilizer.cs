@@ -8,5 +8,7 @@ namespace AgroPlan.Core.Domain
     {
         public Guid Id { get; set; }
         public String Name { get; set; }
+
+        public IEnumerable<FertilizerComponent> FertilizerComponents { get; set; }
     }
 }

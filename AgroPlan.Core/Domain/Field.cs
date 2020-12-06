@@ -11,5 +11,7 @@ namespace AgroPlan.Core.Domain
         public String Name { get; set; }
 
         public ApplicationUser User { get; set; }
+        public IEnumerable<Parcel> Parcels { get; set; }
+        public IEnumerable<YearPlan> YearPlans { get; set; }
     }
 }

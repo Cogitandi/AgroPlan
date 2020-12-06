@@ -13,6 +13,9 @@ namespace AgroPlan.Infrastructure.Data.Configuration
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name);
+            builder.HasMany(x => x.FertilizerComponents)
+                .WithOne(y=>y.Fertilizer)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

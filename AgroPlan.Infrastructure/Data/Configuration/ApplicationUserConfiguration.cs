@@ -16,6 +16,9 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.Property(x => x.CreateDate);
             builder.Property(x => x.FirstName);
             builder.Property(x => x.LastName);
+            builder.HasMany(x => x.MostCommonlyGrownPlants);
+            builder.HasMany(x => x.Seasons);
+            builder.HasMany(x => x.Fields);
         }
     }
 }

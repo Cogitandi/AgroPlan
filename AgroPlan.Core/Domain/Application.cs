@@ -10,5 +10,7 @@ namespace AgroPlan.Core.Domain
 
         public Season Season { get; set; }
         public ApplicationKind ApplicationKind { get; set; }
+
+        public IEnumerable<ParcelApplication> ParcelApplications { get; set; }
     }
 }

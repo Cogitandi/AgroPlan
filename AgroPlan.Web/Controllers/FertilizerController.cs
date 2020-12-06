@@ -23,7 +23,6 @@ namespace AgroPlan.Web.Controllers
             _fertilizerRepositoryWrapper = fertilizerRepositoryWrapper;
         }
 
-        // GET: FertilizerController
         public ActionResult Index()
         {
             var list = _fertilizerRepositoryWrapper.FertilizerRepository.GetAll();
@@ -36,14 +35,12 @@ namespace AgroPlan.Web.Controllers
             return View(model);
         }
 
-        // GET: FertilizerController/Create
         public ActionResult Create()
         {
             AddChemicalElementList();
             return PartialView();
         }
 
-        // POST: FertilizerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateFertilizerViewModel model)
@@ -53,75 +50,93 @@ namespace AgroPlan.Web.Controllers
                 TempData["Message"] = "Błąd: niepoprawne dane";
                 return RedirectToAction(nameof(Index));
             }
+
+            var components = model.Components.Select(x => new FertilizerComponent()
+            {
+                ChemicalElement = _fertilizerRepositoryWrapper.ChemicalElementRepository.GetById(x.Id).Result,
+                PercentageContent = x.PercentageContent
+            }).ToList();
+
             var fertilizer = new Fertilizer()
             {
                 Name = model.Name,
+                FertilizerComponents = components
             };
+
             await _fertilizerRepositoryWrapper.FertilizerRepository.Add(fertilizer);
             TempData["Message"] = "Dodano nowy nawóz: "+ fertilizer.Name;
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddComponent(CreateFertilizerViewModel model)
+        public ActionResult AddComponent(ComponentsPartialViewModel model)
         {
             model.Components = model.Components.Append(new FertilizerComponentViewModel());
             AddChemicalElementList();
-            return PartialView("Create", model);
+            return PartialView("_Components", model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteComponent(CreateFertilizerViewModel model,int index)
+        public ActionResult DeleteComponent(ComponentsPartialViewModel model,int index)
         {
             var toDelete = model.Components.ElementAt(index);
             model.Components = model.Components.Where(x => x != toDelete);
             AddChemicalElementList();
             ModelState.Clear();
-            return PartialView("Create", model);
+            return PartialView("_Components", model);
         }
 
-        // GET: FertilizerController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var fertilizer = await _fertilizerRepositoryWrapper.FertilizerRepository.GetIncludedFertilizer(id);
+
+            var model = new EditFertilizerViewModel()
+            {
+                Id = fertilizer.Id,
+                Name = fertilizer.Name,
+                Components = fertilizer.FertilizerComponents.Select(x => new FertilizerComponentViewModel()
+                {
+                    Id = x.ChemicalElement.Id,
+                    PercentageContent = x.PercentageContent
+                })
+            };
+            AddChemicalElementList();
+            return PartialView(model);
         }
 
-        // POST: FertilizerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(EditFertilizerViewModel model)
         {
-            try
+            if (!ModelState.IsValid)
             {
+                TempData["Message"] = "Błąd: niepoprawne dane";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+
+            var components = model.Components.Select(x => new FertilizerComponent()
             {
-                return View();
-            }
+                ChemicalElement = _fertilizerRepositoryWrapper.ChemicalElementRepository.GetById(x.Id).Result,
+                PercentageContent = x.PercentageContent
+            }).ToList();
+
+            var fertilizer = await _fertilizerRepositoryWrapper.FertilizerRepository.GetIncludedFertilizer(model.Id);
+            fertilizer.Name = model.Name;
+            fertilizer.FertilizerComponents = components;
+
+            await _fertilizerRepositoryWrapper.FertilizerRepository.Update(fertilizer);
+            TempData["Message"] = "Zmieniono nawóz: " + fertilizer.Name;
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: FertilizerController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: FertilizerController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task Delete(Guid id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var fertilizer = await _fertilizerRepositoryWrapper.FertilizerRepository.GetById(id);
+            await _fertilizerRepositoryWrapper.FertilizerRepository.Delete(fertilizer);
+            TempData["Message"] = fertilizer.Name + " został usunięty";
+            return;
         }
-
 
         private void AddChemicalElementList()
         {
