@@ -1,4 +1,5 @@
 ﻿using AgroPlan.Core.Domain;
+using AgroPlan.Core.Repositories;
 using AgroPlan.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class ChemicalElementRepository : RepositoryBase<ChemicalElement>
+    public class ChemicalElementRepository : RepositoryBase<ChemicalElement>, IChemicalElementRepository
     {
         public ChemicalElementRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }

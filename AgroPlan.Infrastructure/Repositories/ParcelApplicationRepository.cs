@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class ParcelApplicationRepository : RepositoryBase<ParcelApplication>
+    public class ParcelApplicationRepository : RepositoryBase<ParcelApplication>, IParcelApplicationRepository
     {
         public ParcelApplicationRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }

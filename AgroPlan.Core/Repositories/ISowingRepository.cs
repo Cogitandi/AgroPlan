@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AgroPlan.Core.Repositories
 {
-    public interface ISprayingProduct : IRepositoryBase<SprayingProduct>
+    public interface ISowingRepository : IRepositoryBase<Sowing>
     {
     }
 }

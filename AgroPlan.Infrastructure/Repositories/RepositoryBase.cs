@@ -1,5 +1,6 @@
 ﻿using AgroPlan.Core.Repositories;
 using AgroPlan.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +31,7 @@ namespace AgroPlan.Infrastructure.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return  _context.Set<T>();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public async Task<T> GetById(Guid id)

@@ -10,7 +10,7 @@ using AgroPlan.Infrastructure.Data;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class ApplicationKindRepository : RepositoryBase<ApplicationKind>
+    public class ApplicationKindRepository : RepositoryBase<ApplicationKind>, IApplicationKindRepository
     {
         public ApplicationKindRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }

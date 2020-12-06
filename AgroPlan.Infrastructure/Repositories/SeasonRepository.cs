@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class SeasonRepository : RepositoryBase<Season>
+    public class SeasonRepository : RepositoryBase<Season>, ISeasonRepository
     {
         public SeasonRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }

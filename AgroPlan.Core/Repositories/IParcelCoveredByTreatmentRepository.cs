@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AgroPlan.Core.Repositories
 {
-    public interface IChemicalElement : IRepositoryBase<ChemicalElement>
+    public interface IParcelCoveredByTreatmentRepository : IRepositoryBase<ParcelCoveredByTreatment>
     {
     }
 }

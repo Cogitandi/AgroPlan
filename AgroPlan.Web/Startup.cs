@@ -2,6 +2,7 @@ using AgroPlan.Core.Domain;
 using AgroPlan.Core.Repositories;
 using AgroPlan.Infrastructure.Data;
 using AgroPlan.Infrastructure.Repositories;
+using AgroPlan.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,7 +38,13 @@ namespace AgroPlan.Web
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<DatabaseContext>();
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+
+            services.AddControllersWithViews(o =>
+             {
+                 o.ModelBindingMessageProvider.SetValueMustBeANumberAccessor((arg) => "Niepoprawna liczba" );
+                 o.ModelMetadataDetailsProviders.Add(new MetadataTranslationProvider(typeof(Resources)));
+             });
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -60,7 +67,8 @@ namespace AgroPlan.Web
                 options.User.RequireUniqueEmail = false;
             });
 
-            services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            services.AddScoped<IPlantRepository, PlantRepository>();
+            services.AddScoped<IMostCommonlyGrownPlantRepository, MostCommonlyGrownPlantRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

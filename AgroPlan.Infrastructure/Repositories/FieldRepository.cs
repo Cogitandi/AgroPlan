@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class FieldRepository : RepositoryBase<FieldRepository>
+    public class FieldRepository : RepositoryBase<Field>, IFieldRepository
     {
         public FieldRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }
