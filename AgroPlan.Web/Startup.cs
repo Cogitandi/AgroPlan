@@ -1,7 +1,9 @@
 using AgroPlan.Core.Domain;
 using AgroPlan.Core.Repositories;
+using AgroPlan.Core.RepositoryWrappers;
 using AgroPlan.Infrastructure.Data;
 using AgroPlan.Infrastructure.Repositories;
+using AgroPlan.Infrastructure.RepositoryWrappers;
 using AgroPlan.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,6 +71,8 @@ namespace AgroPlan.Web
 
             services.AddScoped<IPlantRepository, PlantRepository>();
             services.AddScoped<IMostCommonlyGrownPlantRepository, MostCommonlyGrownPlantRepository>();
+            // wrappes
+            services.AddScoped<IFertilizerRepositoryWrapper, FertilizerRepositoryWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

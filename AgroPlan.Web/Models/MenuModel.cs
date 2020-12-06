@@ -23,6 +23,7 @@ namespace AgroPlan.Web.Models
 
         // Nav class
         public static string PlantListNavClass(ViewContext viewContext) => PageNavClass(viewContext, PlantListTitle);
+        public static string FertilizerListNavClass(ViewContext viewContext) => PageNavClass(viewContext, FertilizerListTitle);
 
 
         private static string PageNavClass(ViewContext viewContext, string page)
