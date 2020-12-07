@@ -3,6 +3,8 @@ using AgroPlan.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +29,16 @@ namespace AgroPlan.Infrastructure.Repositories
         {
             _context.Set<T>().Remove(obj);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().Where(expression).ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> FindByCondition(Func<DbSet<T>, IQueryable<T>> customInclude, Expression<Func<T, bool>> expression)
+        {
+            return await customInclude(_context.Set<T>()).Where(expression).ToListAsync();
         }
 
         public IEnumerable<T> GetAll()

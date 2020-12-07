@@ -71,6 +71,7 @@ namespace AgroPlan.Web
 
             services.AddScoped<IPlantRepository, PlantRepository>();
             services.AddScoped<IMostCommonlyGrownPlantRepository, MostCommonlyGrownPlantRepository>();
+            services.AddScoped<IFieldRepository, FieldRepository>();
             // wrappes
             services.AddScoped<IFertilizerRepositoryWrapper, FertilizerRepositoryWrapper>();
         }

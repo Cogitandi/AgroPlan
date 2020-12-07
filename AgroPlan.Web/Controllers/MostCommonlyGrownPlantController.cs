@@ -59,7 +59,7 @@ namespace AgroPlan.Web.Controllers
             {
                 var user = await _userManager.GetUserAsync(User);
                 var mostCommonlyGrownPlants = await _mostCommonlyGrownPlantRepository.GetAllIncluded(user);
-                var isUserhaveSelectedPlant = mostCommonlyGrownPlants.Where(x => x.Plant == plant).Count() != 0 ;
+                var isUserhaveSelectedPlant = mostCommonlyGrownPlants.Where(x => x.Plant == plant).Any();
 
                 if(isUserhaveSelectedPlant)
                 {

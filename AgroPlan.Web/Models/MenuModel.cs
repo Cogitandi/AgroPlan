@@ -11,7 +11,7 @@ namespace AgroPlan.Web.Models
         // Titles
         public static String PlantListTitle { get; } = "Lista roślin";
         public static String MostCommonlyGrownPlantListTitle { get; } = "Uprawiane rośliny";
-        public static String FieldListTitle { get; } = "Moje pole";
+        public static String FieldListTitle { get; } = "Moje pola";
         public static String TreatmentListTitle { get; } = "Historia zabiegów";
         public static String SprayingProductListTitle { get; } = "Środki do oprysku";
         public static String FertilizerListTitle { get; } = "Lista nawozów";
@@ -25,6 +25,7 @@ namespace AgroPlan.Web.Models
         public static string PlantListNavClass(ViewContext viewContext) => PageNavClass(viewContext, PlantListTitle);
         public static string FertilizerListNavClass(ViewContext viewContext) => PageNavClass(viewContext, FertilizerListTitle);
         public static string MostCommonlyGrownPlantNavClass(ViewContext viewContext) => PageNavClass(viewContext, MostCommonlyGrownPlantListTitle);
+        public static string FieldsNavClass(ViewContext viewContext) => PageNavClass(viewContext, FieldListTitle);
 
 
         private static string PageNavClass(ViewContext viewContext, string page)
