@@ -49,10 +49,10 @@ namespace AgroPlan.Web.Controllers
             {
                 Id = x.Id,
                 FieldName = x.Field.Name,
-                PlantId = x.Plant.Id,
+                PlantId = x.Plant==null? Guid.Empty:x.Plant.Id,
                 Area = Field.GetTotalArea(x.Field.Parcels)
 
-            });
+            }).ToList();
             ViewBag.PlantList = selectPlantList;
             ViewBag.SeasonId = seasonId;
             return View(model);

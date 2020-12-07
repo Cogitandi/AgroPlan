@@ -10,5 +10,6 @@ namespace AgroPlan.Core.Domain
 
         public Parcel Parcel { get; set; }
         public Application Application { get; set; }
+        public bool IsApplicated { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Parcel);
             builder.HasOne(x => x.Application);
+            builder.Property(x => x.IsApplicated);
         }
     }
 }

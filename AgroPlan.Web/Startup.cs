@@ -74,6 +74,9 @@ namespace AgroPlan.Web
             services.AddScoped<IFieldRepository, FieldRepository>();
             services.AddScoped<ISeasonRepository, SeasonRepository>();
             services.AddScoped<IYearPlanRepository, YearPlanRepository>();
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            services.AddScoped<IApplicationKindRepository, ApplicationKindRepository>();
+            services.AddScoped<IParcelApplicationRepository, ParcelApplicationRepository>();
             // wrappes
             services.AddScoped<IFertilizerRepositoryWrapper, FertilizerRepositoryWrapper>();
         }

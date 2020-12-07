@@ -30,6 +30,10 @@ namespace AgroPlan.Core.Domain
             }).ToList();
             return yearplans;
         }
+        public static IEnumerable<Application> CreateApplications(IEnumerable<ApplicationKind> applicationKinds, IEnumerable<Field> fields, Season season)
+        {
+            return applicationKinds.Select(x => Application.CreateApplication(fields, x, season));
+        }
     }
 
 }

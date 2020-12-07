@@ -12,22 +12,15 @@ using System.Threading.Tasks;
 namespace AgroPlan.Web.Controllers
 {
     [Authorize]
-    [Route("wnioski/[action]")]
+    [Route("sezon/[action]")]
     public class SeasonController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IFieldRepository _fieldRepository;
         private readonly ISeasonRepository _seasonRepository;
+        private readonly IApplicationKindRepository _applicationKindRepository;
+        private readonly IApplicationRepository _applicationRepository;
 
-        public SeasonController(
-            UserManager<ApplicationUser> userManager,
-            IFieldRepository fieldRepository,
-            ISeasonRepository seasonRepository)
-        {
-            _userManager = userManager;
-            _fieldRepository = fieldRepository;
-            _seasonRepository = seasonRepository;
-        }
 
         public async Task<ActionResult> Index()
         {
@@ -50,16 +43,7 @@ namespace AgroPlan.Web.Controllers
 
         public async Task<ActionResult> Manage(Guid id)
         {
-            var user = await _userManager.GetUserAsync(User);
-            var list = await _seasonRepository.FindByCondition(x => x.User == user);
-
-            var model = list.Select(x => new ManageViewModel()
-            {
-                Id = x.Id,
-                Name = x.GetName
-
-            }).FirstOrDefault();
-            return View(model);
+            return View((Object)id.ToString());
         }
 
         [HttpPost]
@@ -73,7 +57,8 @@ namespace AgroPlan.Web.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            var fields = await _fieldRepository.FindByCondition(x => x.User == user);
+            var fields = await _fieldRepository.FindByCondition(dbSet=>dbSet.Include(x=>x.Parcels),x => x.User == user);
+            var applicationKinds = await _applicationKindRepository.FindByCondition(x=> true);
 
             var season = new Season()
             {
@@ -83,9 +68,15 @@ namespace AgroPlan.Web.Controllers
             };
 
             var yearPlans = Season.CreateYearPlans(fields, season);
+            var applications = Season.CreateApplications(applicationKinds, fields, season);
             season.YearPlans = yearPlans;
 
             await _seasonRepository.Add(season);
+            foreach(var application in applications)
+            {
+                await _applicationRepository.Add(application);
+            }
+            
             TempData["Message"] = "Dodano nowy sezon: " + season.GetName;
             return RedirectToAction(nameof(Index));
         }
@@ -98,7 +89,10 @@ namespace AgroPlan.Web.Controllers
             TempData["Message"] = "Sezon " + season.GetName + " został usunięty";
             return;
         }
-
+        public IActionResult Summary(Guid SeasonId)
+        {
+            return View();
+        }
         // Validation
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> UniqueSeason(int startYear)
@@ -115,5 +109,19 @@ namespace AgroPlan.Web.Controllers
 
         private Func<DbSet<Season>, IQueryable<Season>> includeSeasonUser =
                 arg => arg.Include(x => x.User);
+
+
+        public SeasonController(UserManager<ApplicationUser> userManager,
+            IFieldRepository fieldRepository, 
+            ISeasonRepository seasonRepository,
+            IApplicationKindRepository applicationKindRepository,
+            IApplicationRepository applicationRepository)
+        {
+            _userManager = userManager;
+            _fieldRepository = fieldRepository;
+            _seasonRepository = seasonRepository;
+            _applicationKindRepository = applicationKindRepository;
+            _applicationRepository = applicationRepository;
+        }
     }
 }

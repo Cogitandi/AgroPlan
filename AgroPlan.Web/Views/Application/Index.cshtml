@@ -1,8 +1,8 @@
-﻿@using AgroPlan.Web.Models.Season
-@model String
+﻿@using AgroPlan.Web.Models.Application
+@model IEnumerable<ApplicationListViewModel>
 
 @{
-    ViewData["Title"] = "Sezon ";
+    ViewData["Title"] = "Twoje wnioski";
 }
 
 <!--- Content -->
@@ -19,13 +19,12 @@
                 <partial name="_StatusMessage" model="@TempData["Message"].ToString()" />
             }
         <div class="text-center">
-            @Html.ActionLink("Wnioski", "Index","Application", new { seasonId = Model }, new { @class = "btn btn-primary" })
-            @Html.ActionLink("Uprawy", "Index","Plan", new { seasonId = Model }, new { @class = "btn btn-default" })
-            @Html.ActionLink("Podsumowanie", "Summary", new { seasonId = Model }, new { @class = "btn btn-success" })
+            @foreach (var application in Model)
+            {
+                @Html.ActionLink(application.Name, "Detail", new { applicationId = application.Id }, new { @class = "btn btn-primary" })
+            }
         </div>
         </div>
     </div>
 </div>
 <!--- End content -->
-
-
