@@ -16,6 +16,12 @@ namespace AgroPlan.Infrastructure.Data.Configuration
             builder.Property(x => x.StartYear);
             builder.Property(x => x.EndYear);
             builder.HasOne(x => x.User);
+            builder.HasMany(x => x.YearPlans)
+                .WithOne(y=>y.Season)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.Applications)
+                .WithOne(y => y.Season)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

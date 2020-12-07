@@ -1,0 +1,9 @@
+﻿@model AgroPlan.Web.Models.Plan.YearPlanViewModel
+<tr>
+    <td class="align-middle">
+        <input asp-for="@Model.Id" class="form-control" hidden />
+        @Html.DisplayFor(modelItem => Model.FieldName)
+    </td>
+    <td class="align-middle">@Html.DisplayFor(modelItem => Model.Area)</td>
+    <td class="align-middle"><select class="form-control" asp-items="@ViewBag.PlantList" asp-for="@Model.PlantId"></select></td>
+</tr>

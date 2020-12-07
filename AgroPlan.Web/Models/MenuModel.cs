@@ -15,17 +15,15 @@ namespace AgroPlan.Web.Models
         public static String TreatmentListTitle { get; } = "Historia zabiegów";
         public static String SprayingProductListTitle { get; } = "Środki do oprysku";
         public static String FertilizerListTitle { get; } = "Lista nawozów";
-        public static String ChemicalElementListTitle { get; } = "Składniki nawozów";
-        public static String TreatmentKindListTitle { get; } = "Rodzaje zabiegów";
         public static String ApplicationListTitle { get; } = "Moje wnioski";
         public static String SeasonListTitle { get; } = "Lista sezonów";
-        public static String ApplicationKindListTitle { get; } = "Rodzaje wniosków";
 
         // Nav class
         public static string PlantListNavClass(ViewContext viewContext) => PageNavClass(viewContext, PlantListTitle);
         public static string FertilizerListNavClass(ViewContext viewContext) => PageNavClass(viewContext, FertilizerListTitle);
         public static string MostCommonlyGrownPlantNavClass(ViewContext viewContext) => PageNavClass(viewContext, MostCommonlyGrownPlantListTitle);
         public static string FieldsNavClass(ViewContext viewContext) => PageNavClass(viewContext, FieldListTitle);
+        public static string SeasonNavClass(ViewContext viewContext) => PageNavClass(viewContext, SeasonListTitle);
 
 
         private static string PageNavClass(ViewContext viewContext, string page)
