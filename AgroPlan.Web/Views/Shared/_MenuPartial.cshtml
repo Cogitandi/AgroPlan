@@ -1,10 +1,20 @@
 ﻿<!--- Left menu -->
 <div class="col-md-2 mb-4">
+    @if (User.IsInRole("Administrator"))
+    {
+        <h4>Administrator</h4>
+        <ul class="nav nav-pills flex-column">
+            <li><a class="nav-link font-weight-bold @MenuModel.PlantListNavClass(ViewContext)" asp-controller="Plant" asp-action="index">Rośliny</a></li>
+            <li><a class="nav-link font-weight-bold @MenuModel.FertilizerListNavClass(ViewContext)" asp-controller="Fertilizer" asp-action="index">Nawozy</a></li>
+        </ul>
+    }
+    <h4>Zarządzaj gospodarstwem</h4>
     <ul class="nav nav-pills flex-column">
-        <li><a class="nav-link font-weight-bold @MenuModel.PlantListNavClass(ViewContext)" asp-controller="Plant" asp-action="index">Lista roślin</a></li>
-        <li><a class="nav-link font-weight-bold @MenuModel.FertilizerListNavClass(ViewContext)" asp-controller="Fertilizer" asp-action="index">Lista nawozów</a></li>
         <li><a class="nav-link font-weight-bold @MenuModel.MostCommonlyGrownPlantNavClass(ViewContext)" asp-controller="MostCommonlyGrownPlant" asp-action="index">Wybierz rośliny</a></li>
+        <li><a class="nav-link font-weight-bold @MenuModel.FertilizerListForUsersNavClass(ViewContext)" asp-controller="Fertilizer" asp-action="List">Dostepne nawozy</a></li>
         <li><a class="nav-link font-weight-bold @MenuModel.FieldsNavClass(ViewContext)" asp-controller="Field" asp-action="index">Moje pola</a></li>
+        <li><a class="nav-link font-weight-bold @MenuModel.SprayingMixturesNavClass(ViewContext)" asp-controller="SprayingMixture" asp-action="index">Mieszaniny</a></li>
         <li><a class="nav-link font-weight-bold @MenuModel.SeasonNavClass(ViewContext)" asp-controller="Season" asp-action="index">Sezony</a></li>
+        <li><a class="nav-link font-weight-bold @MenuModel.TreatmentListNavClass(ViewContext)" asp-controller="Treatments" asp-action="index">Zabiegi</a></li>
     </ul>
 </div>

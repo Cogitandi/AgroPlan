@@ -21,16 +21,19 @@ namespace AgroPlan.Web.Controllers
         private readonly IYearPlanRepository _yearPlanRepository;
         private readonly IMostCommonlyGrownPlantRepository _mostCommonlyGrownPlantRepository;
         private readonly IPlantRepository _plantRepository;
+        private readonly ISeasonRepository _seasonRepository;
 
         public PlanController(UserManager<ApplicationUser> userManager,
             IYearPlanRepository yearPlanRepository,
             IMostCommonlyGrownPlantRepository mostCommonlyGrownPlantRepository,
+            ISeasonRepository seasonRepository,
             IPlantRepository plantRepository)
         {
             _userManager = userManager;
             _yearPlanRepository = yearPlanRepository;
             _mostCommonlyGrownPlantRepository = mostCommonlyGrownPlantRepository;
             _plantRepository = plantRepository;
+            _seasonRepository = seasonRepository;
         }
 
         public async Task<ActionResult> Index(Guid seasonId)
@@ -39,10 +42,22 @@ namespace AgroPlan.Web.Controllers
             var yearPlanList = await _yearPlanRepository.FindByCondition(YearPlanInclude, x => x.Season.Id == seasonId);
             var plantList = await _mostCommonlyGrownPlantRepository.FindByCondition(dbset=>dbset.Include(x=>x.Plant),x=>x.User==user);
 
+            var currentSeason = await _seasonRepository.GetById(seasonId);
+            var startYearOfCurrentSeason = currentSeason.StartYear;
+            var seasonBack1 = await _seasonRepository.FindByCondition(x => x.StartYear == startYearOfCurrentSeason-1 && x.User == user);
+            var seasonBack2 = await _seasonRepository.FindByCondition(x => x.StartYear == startYearOfCurrentSeason-2 && x.User == user);
+            var yearPlan1List = await _yearPlanRepository.FindByCondition(YearPlanInclude, x => x.Season == seasonBack1.FirstOrDefault());
+            var yearPlan2List = await _yearPlanRepository.FindByCondition(YearPlanInclude, x => x.Season == seasonBack2.FirstOrDefault());
+
             var selectPlantList = plantList.Select(x => new SelectListItem()
             {
                 Text = x.Plant.Name,
                 Value = x.Plant.Id.ToString()
+            });
+            selectPlantList = selectPlantList.Append(new SelectListItem() 
+            { 
+                Value = Guid.Empty.ToString(),
+                Text = "Nie ustalono" 
             });
 
             var model = yearPlanList.Select(x => new YearPlanViewModel()
@@ -50,11 +65,14 @@ namespace AgroPlan.Web.Controllers
                 Id = x.Id,
                 FieldName = x.Field.Name,
                 PlantId = x.Plant==null? Guid.Empty:x.Plant.Id,
-                Area = Field.GetTotalArea(x.Field.Parcels)
+                Area = Field.GetTotalArea(x.Field.Parcels),
+                Plant1Name = YearPlan.GetPlantNameForField(yearPlan1List, x.Field.Id),
+                Plant2Name = YearPlan.GetPlantNameForField(yearPlan2List, x.Field.Id),
 
             }).ToList();
             ViewBag.PlantList = selectPlantList;
             ViewBag.SeasonId = seasonId;
+            ViewBag.CurrentSeasonStartYear = currentSeason.StartYear;
             return View(model);
         }
         [HttpPost]
@@ -67,7 +85,7 @@ namespace AgroPlan.Web.Controllers
             foreach(var yearPlan in yearPlanList)
             {
                 var yearPlanFromModel = Yearplans.Where(x => x.Id == yearPlan.Id).FirstOrDefault();
-                yearPlan.Plant = plantList.Where(x => x.Plant.Id == yearPlanFromModel.PlantId).FirstOrDefault().Plant;
+                yearPlan.Plant = plantList.Where(x => x.Plant.Id == yearPlanFromModel.PlantId).FirstOrDefault()?.Plant;
                 await _yearPlanRepository.Update(yearPlan);
             }
 

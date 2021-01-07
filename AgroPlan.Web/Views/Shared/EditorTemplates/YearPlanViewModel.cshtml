@@ -5,5 +5,7 @@
         @Html.DisplayFor(modelItem => Model.FieldName)
     </td>
     <td class="align-middle">@Html.DisplayFor(modelItem => Model.Area)</td>
+    <td class="align-middle">@Html.DisplayFor(modelItem => Model.Plant2Name)</td>
+    <td class="align-middle">@Html.DisplayFor(modelItem => Model.Plant1Name)</td>
     <td class="align-middle"><select class="form-control" asp-items="@ViewBag.PlantList" asp-for="@Model.PlantId"></select></td>
 </tr>

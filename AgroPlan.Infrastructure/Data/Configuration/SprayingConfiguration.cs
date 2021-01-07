@@ -7,14 +7,15 @@ using System.Text;
 
 namespace AgroPlan.Infrastructure.Data.Configuration
 {
-    public class SprayingConfiguration : IEntityTypeConfiguration<Spraying>
+    public class SprayingConfiguration : IEntityTypeConfiguration<SprayingMixture>
     {
-        public void Configure(EntityTypeBuilder<Spraying> builder)
+        public void Configure(EntityTypeBuilder<SprayingMixture> builder)
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Name);
             builder.Property(x => x.ReasonForUse);
             builder.HasMany(x => x.SprayingComponents);
+            builder.HasOne(x => x.User);
         }
     }
 }

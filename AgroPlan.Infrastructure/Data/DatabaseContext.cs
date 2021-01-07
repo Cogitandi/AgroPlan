@@ -26,7 +26,7 @@ namespace AgroPlan.Infrastructure.Data
         public DbSet<TreatmentKind> TreatmentKinds { get; set; }
         public DbSet<Treatment> Treatments { get; set; }
         public DbSet<Sowing> Sowings { get; set; }
-        public DbSet<Spraying> Sprayings { get; set; }
+        public DbSet<SprayingMixture> Sprayings { get; set; }
         public DbSet<SprayingComponent> SprayingComponents { get; set; }
         public DbSet<SprayingProduct> SprayingProducts { get; set; }
         public DbSet<ContentUnit> ContentUnits { get; set; }

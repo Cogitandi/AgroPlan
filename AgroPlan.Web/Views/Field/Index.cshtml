@@ -41,6 +41,7 @@
                         <td class="align-middle">@Html.DisplayFor(modelItem => plant.Name)</td>
                         <td class="align-middle">@Html.DisplayFor(modelItem => plant.Area)</td>
                         <td>
+                            <a class="btn btn-amber btn-sm editBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalEdit">Szczegóły</a>
                             <a class="btn btn-info btn-sm editBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalEdit">Edytuj</a>
                             <a class="btn btn-danger btn-sm deleteBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalDelete">Usuń<i class="fas fa-times ml-1"></i></a>
                         </td>
@@ -117,11 +118,15 @@
                 "scrollCollapse": true,
                 "bInfo": false,
                 "iDisplayLength": 50,
+                "columnDefs": [{
+                    "targets": [3],
+                    "orderable": false
+                }],
                 "oLanguage": {
-                    "sSearch": "Wyszukaj roślinę:",
-                    "sLengthMenu": "Wyświetl _MENU_ roślin",
-                    "sInfoEmpty": "Nie znaleziono żadnych nawozów",
-                    "sZeroRecords": "Nie znaleziono żadnych nawozów",
+                    "sSearch": "Wyszukaj pole:",
+                    "sLengthMenu": "Wyświetl _MENU_ pól",
+                    "sInfoEmpty": "Nie znaleziono żadnych pól",
+                    "sZeroRecords": "Nie znaleziono żadnych pól",
                     "oPaginate": {
                         "sNext": "Następna",
                         "sPrevious": "Poprzednia",

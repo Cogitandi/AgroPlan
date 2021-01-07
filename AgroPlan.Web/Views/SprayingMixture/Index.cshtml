@@ -1,8 +1,8 @@
-﻿@using AgroPlan.Web.Models.Fertilizer
-@model IEnumerable<FertilizerListViewModel>
+﻿@using AgroPlan.Web.Models.SprayingMixture
+@model IEnumerable<SprayingMixtureViewModel>
 
 @{
-    ViewData["Title"] = MenuModel.FertilizerListTitle;
+    ViewData["Title"] = MenuModel.SprayingMixturesTitle;
 }
 
 <!--- Content -->
@@ -32,13 +32,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var plant in Model)
+                    @foreach (var mixture in Model)
                     {
                         <tr>
-                            <td class="align-middle">@Html.DisplayFor(modelItem => plant.Name)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => mixture.Name)</td>
                             <td>
-                                <a class="btn btn-info btn-sm editBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalEdit">Edytuj</a>
-                                <a class="btn btn-danger btn-sm deleteBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalDelete">Usuń<i class="fas fa-times ml-1"></i></a>
+                                <a class="btn btn-info btn-sm editBtn" data-id="@mixture.Id" data-toggle="modal" data-target="#modalEdit">Szczegóły</a>
                             </td>
                         </tr>
                     }
@@ -48,33 +47,13 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">Uwaga!</h4>
-                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <p class="text-center h4">Czy na pewno chcesz usunąć roślinę?</p>
-
-            </div>
-            <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
-                <button type="button" class="btn btn-danger btnYesClass" id="DeleteConfirmed" data-dismiss="modal">Tak</button>
-                <button type="button" class="btn btn-primary btnNoClass" id="btnNo" data-dismiss="modal">Nie</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade addNewInputs" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAdd"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Dodaj nowy nawóz</h4>
+                <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Dodaj nową mieszanine</h4>
                 <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,7 +69,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Edytuj</h4>
+                <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Szczegóły</h4>
                 <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -108,16 +87,21 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
+                "searching": false,
                 "scrollY": "50vh",
                 "scrollX": true,
                 "scrollCollapse": true,
                 "bInfo": false,
+                "columnDefs": [{
+                    "targets": [1],
+                    "orderable": false
+                }],
                 "iDisplayLength": 50,
                 "oLanguage": {
-                    "sSearch": "Wyszukaj nawóz:",
-                    "sLengthMenu": "Wyświetl _MENU_ nawozów",
-                    "sInfoEmpty": "Nie znaleziono żadnych nawozów",
-                    "sZeroRecords": "Nie znaleziono żadnych nawozów",
+                    "sSearch": "Wyszukaj mieszaninę:",
+                    "sLengthMenu": "Wyświetl _MENU_ mieszanin",
+                    "sInfoEmpty": "Nie znaleziono żadnych mieszanin",
+                    "sZeroRecords": "Nie znaleziono żadnych mieszanin",
                     "oPaginate": {
                         "sNext": "Następna",
                         "sPrevious": "Poprzednia",
@@ -129,33 +113,13 @@
     </script>
 
     <script>
-        // Delete Modal
-        $('.deleteBtn').click(function () {
-            var ID = $(this).data('id');
-            $('#DeleteConfirmed').data('id', ID);
-        });
-
-        $('#DeleteConfirmed').click(function () {
-            var id = $(this).data('id');
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("Delete")",
-                data: {
-                    Id: id
-                },
-                dataType: "text",
-                success: function (msg) {
-                    location.reload();
-                },
-            })
-        })
 
         // Edit Modal
         $('.editBtn').click(function () {
             var id = $(this).data('id');
              $.ajax({
                 type: "GET",
-                url: "@Url.Action("Edit")",
+                url: "@Url.Action("Details")",
                 data: {
                     Id: id
                 },

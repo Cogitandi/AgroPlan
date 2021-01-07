@@ -1,5 +1,50 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using AgroPlan.Web.Models.Season
+@model IEnumerable<SummaryViewModel>
+
 @{
+    ViewData["Title"] = "Podsumowanie";
 }
+
+<!--- Content -->
+<div class="row">
+    <partial name="_MenuPartial" />
+    <div class="col-md-10">
+        <div class="container-md mx-4">
+            <button class="btn btn-primary hBack" type="button">Cofnij</button>
+            <h2 class="text-center">@ViewData["Title"]</h2>
+            <hr />
+            <div class="d-flex flex-wrap">
+                <div class="card mx-2 my-2">
+                    <div class="card-body">
+                        <table class="table w-auto table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="text-center">Gospodarstwo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model)
+                                {
+                                    <tr>
+                                        <td>@row.Name</td>
+                                        <td>@row.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+<!--- End content -->
+
+@section Scripts {
+    <script>
+        $(".hBack").on("click", function (e) {
+            e.preventDefault();
+           window.history.back();
+        });
+    </script>
+} 

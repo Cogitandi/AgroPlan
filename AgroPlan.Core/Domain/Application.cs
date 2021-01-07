@@ -37,6 +37,16 @@ namespace AgroPlan.Core.Domain
 
             return application;
         }
+        public static int GetApplicationArea(IEnumerable<ParcelApplication> parcelsApplication)
+        {
+            int area = 0;
+            foreach(var parcelApplication in parcelsApplication)
+            {
+                if (parcelApplication.IsApplicated == true)
+                    area += parcelApplication.Parcel.CultivatedArea;
+            }
+            return area;
+        }
 
     }
 }

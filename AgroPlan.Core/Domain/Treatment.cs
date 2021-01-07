@@ -11,7 +11,7 @@ namespace AgroPlan.Core.Domain
         public String Notes { get; set; }
 
         public TreatmentKind TreatmentKind { get; set; }
-        public Spraying Spraying { get; set; }
+        public SprayingMixture Spraying { get; set; }
         public Fertilization Fertilization { get; set; }
         public Sowing Sowing { get; set; }
 

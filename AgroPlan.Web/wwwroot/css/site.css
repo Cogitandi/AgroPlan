@@ -72,7 +72,7 @@ body {
 }
 #intro {
     background-image: url("../img/start.jpg");
-    height: 50vh;
+    height: 30vh;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;

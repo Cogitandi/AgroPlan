@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AgroPlan.Core.Repositories
 {
-    public interface ISprayingRepository : IRepositoryBase<Spraying>
+    public interface ISprayingRepository : IRepositoryBase<SprayingMixture>
     {
     }
 }

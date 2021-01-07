@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<AgroPlan.Web.Models.Application.ApplicationDetailViewModel>
 
 @{
-    ViewData["Title"] = "WnioseK";
+    ViewData["Title"] = "Wniosek";
 }
 
 
@@ -10,7 +10,8 @@
     <partial name="_MenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-4">
-            <p class="text-center" id="headerTitle">@ViewData["Header"]</p>
+            <button class="btn btn-primary hBack" type="button">Cofnij</button>
+            <h2 class="text-center">@ViewData["Title"]</h2>
             <hr />
             <!-- Status message -->
             @if (TempData["Message"] != null)
@@ -33,10 +34,10 @@
                             <td>@Html.DisplayFor(model => item.FieldName)</td>
                             <td>@Html.DisplayFor(model => item.ParcelNumber)</td>
                             <td>@Html.DisplayFor(model => item.Area)</td>
-                            <td data-order=@{ if (item.Checked == true) { <text>1</text>} else { <text>0</text> }}>
+                            <td data-order=@{ if (item.Checked == true) { <text> 1</text>} else { <text>0</text> }}>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" name="ApplicationStatus" id="@item.Id" value="@item.Id" @if (item.Checked) { <text> checked</text> } } />
-                                    <label class="custom-control-label" for="@item.Id" onclick="choosePlant.call(this)">Kliknij tutaj</label>
+                                    <label class="custom-control-label" for="@item.Id" onclick="choosePlant.call(this)">Tak</label>
                                 </div>
                             </td>
                         </tr>
@@ -50,8 +51,16 @@
 <!--- End content -->
 
 @section Scripts {
-    <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
+    <script>
+        $(".hBack").on("click", function (e) {
+            e.preventDefault();
+           window.history.back();
+        });
+    </script>
 
+    <script type="text/javascript" src="~/md/js/addons/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/b-1.6.5/b-print-1.6.5/datatables.min.js"></script>
+    <script src="~/md/js/addons/dataTables.rowsGroup.js"></script>
     <script>
         function choosePlant() {
             var input = $(this).siblings('input[name=ApplicationStatus]');
@@ -68,14 +77,69 @@
                 });
             $('#table').DataTable().rows().invalidate();
             }
-            
-        
+
+
         $(document).ready(function () {
             $('#table').DataTable({
                 "scrollY": "50vh",
                 "scrollCollapse": true,
                 "bInfo": false,
                 "iDisplayLength": 50,
+                rowsGroup: [0],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'print',
+                        text: 'Wydrukuj',
+                        autoPrint: true,
+                        className: 'btn-primary',
+                        customize: function (win) {
+                            var table = $(win.document.body).find('table');
+                            console.clear();
+                            var rows = table.find($("tbody tr"));
+                            var colsLength = $(rows[0]).find($("td")).length;
+                            var removeLater = new Array();
+                            for (var i = 0; i < colsLength; i++) {
+                                var startIndex = 0;
+                                var lastIndex = 0;
+                                var startText = $($(rows[0]).find("td")[i]).text();
+                                for (var j = 1; j < rows.length; j++) {
+                                    var cRow = $(rows[j]);
+                                    var cCol = $(cRow.find("td")[i]);
+                                    var currentText = cCol.text();
+                                    if (currentText == startText) {
+                                        cCol.css("background", "gray");
+                                        console.log(cCol);
+                                        removeLater.push(cCol);
+                                        lastIndex = j;
+                                    } else {
+                                        var spanLength = lastIndex - startIndex;
+                                        if (spanLength >= 1) {
+                                            console.log(lastIndex + " - " + startIndex)
+                                            //console.log($($(rows[startIndex]).find("td")[i]))
+                                            $($(rows[startIndex]).find("td")[i]).attr("rowspan", spanLength + 1);
+                                        }
+                                        lastIndex = j;
+                                        startIndex = j;
+                                        startText = currentText;
+                                    }
+
+                                }
+                                var spanLength = lastIndex - startIndex;
+                                if (spanLength >= 1) {
+                                    console.log(lastIndex + " - " + startIndex)
+                                    //console.log($($(rows[startIndex]).find("td")[i]))
+                                    $($(rows[startIndex]).find("td")[i]).attr("rowspan", spanLength + 1);
+                                }
+                                console.log("---");
+                            }
+
+                            for (var i in removeLater) {
+                                $(removeLater[i]).remove();
+                            }
+                        },
+                    }
+                ],
                 "oLanguage": {
                     "sSearch": "Wyszukaj roślinę:",
                     "sLengthMenu": "Wyświetl _MENU_ roślin",

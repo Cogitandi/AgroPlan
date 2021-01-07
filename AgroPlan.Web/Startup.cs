@@ -7,17 +7,12 @@ using AgroPlan.Infrastructure.RepositoryWrappers;
 using AgroPlan.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgroPlan.Web
 {
@@ -39,12 +34,13 @@ namespace AgroPlan.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<DatabaseContext>();
             //services.AddControllersWithViews();
 
             services.AddControllersWithViews(o =>
              {
-                 o.ModelBindingMessageProvider.SetValueMustBeANumberAccessor((arg) => "Niepoprawna liczba" );
+                 o.ModelBindingMessageProvider.SetValueMustBeANumberAccessor((arg) => "Niepoprawna liczba");
                  o.ModelMetadataDetailsProviders.Add(new MetadataTranslationProvider(typeof(Resources)));
              });
 
@@ -77,8 +73,13 @@ namespace AgroPlan.Web
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IApplicationKindRepository, ApplicationKindRepository>();
             services.AddScoped<IParcelApplicationRepository, ParcelApplicationRepository>();
+            services.AddScoped<ITreatmentKindRepository, TreatmentKindRepository>();
+            services.AddScoped<ITreatmentRepository, TreatmentRepository>();
+            services.AddScoped<IParcelCoveredByTreatmentRepository, ParcelCoveredByTreatmentRepository>();
+            services.AddScoped<IParcelRepository, ParcelRepository>();
             // wrappes
             services.AddScoped<IFertilizerRepositoryWrapper, FertilizerRepositoryWrapper>();
+            services.AddScoped<ISprayingRepositoryWrapper, SprayingRepositoryWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

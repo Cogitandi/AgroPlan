@@ -34,6 +34,13 @@ namespace AgroPlan.Core.Domain
         {
             return applicationKinds.Select(x => Application.CreateApplication(fields, x, season));
         }
+        public static IEnumerable<Plant> GetPlants(IEnumerable<YearPlan> yearPlanList)
+        {
+            return yearPlanList
+                .Where(x=>x.Plant != null)
+                .Select(x=>x.Plant)
+                .Distinct();
+        }
     }
 
 }

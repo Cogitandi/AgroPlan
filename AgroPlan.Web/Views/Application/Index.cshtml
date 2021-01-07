@@ -10,6 +10,7 @@
     <partial name="_MenuPartial" />
     <div class="col-md-10">
         <div class="container-md mx-4">
+            <button class="btn btn-primary hBack" type="button">Cofnij</button>
             <h2 class="text-center">@ViewData["Title"]</h2>
             <hr />
 
@@ -18,13 +19,21 @@
             {
                 <partial name="_StatusMessage" model="@TempData["Message"].ToString()" />
             }
-        <div class="text-center">
-            @foreach (var application in Model)
-            {
-                @Html.ActionLink(application.Name, "Detail", new { applicationId = application.Id }, new { @class = "btn btn-primary" })
-            }
-        </div>
+            <div class="text-center">
+                @foreach (var application in Model)
+                {
+                    @Html.ActionLink(application.Name, "Detail", new { applicationId = application.Id }, new { @class = "btn btn-primary" })
+                }
+            </div>
         </div>
     </div>
 </div>
 <!--- End content -->
+@section Scripts {
+    <script>
+        $(".hBack").on("click", function (e) {
+            e.preventDefault();
+           window.history.back();
+        });
+    </script>
+} 

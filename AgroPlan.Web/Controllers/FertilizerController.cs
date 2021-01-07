@@ -23,6 +23,18 @@ namespace AgroPlan.Web.Controllers
             _fertilizerRepositoryWrapper = fertilizerRepositoryWrapper;
         }
 
+        public ActionResult List()
+        {
+            var list = _fertilizerRepositoryWrapper.FertilizerRepository.GetAll();
+
+            var model = list.Select(x => new FertilizerListViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name
+            });
+            return View(model);
+        }
+
         public ActionResult Index()
         {
             var list = _fertilizerRepositoryWrapper.FertilizerRepository.GetAll();

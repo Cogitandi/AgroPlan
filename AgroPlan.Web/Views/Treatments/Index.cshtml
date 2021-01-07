@@ -1,8 +1,8 @@
-﻿@using AgroPlan.Web.Models.Fertilizer
-@model IEnumerable<FertilizerListViewModel>
+﻿@using AgroPlan.Web.Models.Treatment
+@model IEnumerable<TreatmentViewModel>
 
 @{
-    ViewData["Title"] = MenuModel.FertilizerListTitle;
+    ViewData["Title"] = MenuModel.TreatmentListTitle;
 }
 
 <!--- Content -->
@@ -19,6 +19,7 @@
                 <partial name="_StatusMessage" model="@TempData["Message"].ToString()" />
             }
 
+             
             <div class="row d-flex justify-content-center modalWrapper">
                 <div class="text-center">
                     <a href="" class="btn btn-info btn-rounded btn-sm createBtn" data-toggle="modal" data-target="#modalAdd">Dodaj<i class="fas fa-plus-square ml-1"></i></a>
@@ -27,18 +28,23 @@
             <table id="table" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Date)</th>
+                        <th>@Html.DisplayNameFor(model => model.FieldName)</th>
+                        <th>@Html.DisplayNameFor(model => model.Area)</th>
+                        <th>@Html.DisplayNameFor(model => model.TreatmentKind)</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var plant in Model)
+                    @foreach (var treatment in Model)
                     {
                         <tr>
-                            <td class="align-middle">@Html.DisplayFor(modelItem => plant.Name)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => treatment.Date)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => treatment.FieldName)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => treatment.Area)</td>
+                            <td class="align-middle">@Html.DisplayFor(modelItem => treatment.TreatmentKind)</td>
                             <td>
-                                <a class="btn btn-info btn-sm editBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalEdit">Edytuj</a>
-                                <a class="btn btn-danger btn-sm deleteBtn" data-id="@plant.Id" data-toggle="modal" data-target="#modalDelete">Usuń<i class="fas fa-times ml-1"></i></a>
+                                <a class="btn btn-info btn-sm editBtn" data-id="@treatment.TreatmentId" data-toggle="modal" data-target="#modalEdit">Szczegóły</a>
                             </td>
                         </tr>
                     }
@@ -48,33 +54,13 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold ml-5 text-danger">Uwaga!</h4>
-                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body mx-3">
-                <p class="text-center h4">Czy na pewno chcesz usunąć roślinę?</p>
-
-            </div>
-            <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
-                <button type="button" class="btn btn-danger btnYesClass" id="DeleteConfirmed" data-dismiss="modal">Tak</button>
-                <button type="button" class="btn btn-primary btnNoClass" id="btnNo" data-dismiss="modal">Nie</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade addNewInputs" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAdd"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Dodaj nowy nawóz</h4>
+                <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Dodaj nową mieszanine</h4>
                 <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,7 +76,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-center">
-                <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Edytuj</h4>
+                <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Szczegóły</h4>
                 <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -108,16 +94,21 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
+                "searching": false,
                 "scrollY": "50vh",
                 "scrollX": true,
                 "scrollCollapse": true,
+                "columnDefs": [{
+                    "targets": [2,4],
+                    "orderable": false
+                }],
                 "bInfo": false,
                 "iDisplayLength": 50,
                 "oLanguage": {
-                    "sSearch": "Wyszukaj nawóz:",
-                    "sLengthMenu": "Wyświetl _MENU_ nawozów",
-                    "sInfoEmpty": "Nie znaleziono żadnych nawozów",
-                    "sZeroRecords": "Nie znaleziono żadnych nawozów",
+                    "sSearch": "Wyszukaj zabieg:",
+                    "sLengthMenu": "Wyświetl _MENU_ zabiegów",
+                    "sInfoEmpty": "Nie znaleziono żadnych zabiegów",
+                    "sZeroRecords": "Nie znaleziono żadnych zabiegów",
                     "oPaginate": {
                         "sNext": "Następna",
                         "sPrevious": "Poprzednia",
@@ -129,33 +120,13 @@
     </script>
 
     <script>
-        // Delete Modal
-        $('.deleteBtn').click(function () {
-            var ID = $(this).data('id');
-            $('#DeleteConfirmed').data('id', ID);
-        });
-
-        $('#DeleteConfirmed').click(function () {
-            var id = $(this).data('id');
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("Delete")",
-                data: {
-                    Id: id
-                },
-                dataType: "text",
-                success: function (msg) {
-                    location.reload();
-                },
-            })
-        })
 
         // Edit Modal
         $('.editBtn').click(function () {
             var id = $(this).data('id');
              $.ajax({
                 type: "GET",
-                url: "@Url.Action("Edit")",
+                url: "@Url.Action("Details")",
                 data: {
                     Id: id
                 },

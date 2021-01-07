@@ -1,0 +1,27 @@
+﻿@model AgroPlan.Web.Models.SprayingMixture.SprayingComponentViewModel
+
+<div class="form-group">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Name" class="control-label"></label>
+            <select class="form-control" asp-items="@ViewBag.sprayingProducts" asp-for="Name">
+            </select>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Content" class="control-label"></label>
+            <input asp-for="Content" class="form-control" />
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label" style="visibility: hidden">blank</label>
+            <select class="form-control" asp-items="@ViewBag.contentUnits" asp-for="Unit">
+            </select>
+            <span asp-validation-for="Unit" class="text-danger"></span>
+        </div>
+        <div class="col-md-2">
+            <label class="control-label" style="visibility: hidden">blank</label>
+            <button type="submit" class="btn-sm btn-danger delete">Usuń</button>
+        </div>
+    </div>
+</div>

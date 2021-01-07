@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AgroPlan.Infrastructure.Repositories
 {
-    public class SprayingRepository : RepositoryBase<Spraying>, ISprayingRepository
+    public class SprayingRepository : RepositoryBase<SprayingMixture>, ISprayingRepository
     {
         public SprayingRepository(DatabaseContext databaseContext) : base(databaseContext) { }
     }

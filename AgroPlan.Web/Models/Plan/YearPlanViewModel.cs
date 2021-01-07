@@ -20,5 +20,10 @@ namespace AgroPlan.Web.Models.Plan
         }
         [DisplayName("Uprawa")]
         public Guid PlantId { get; set; }
+
+        // Plant grown current year -1
+        public String Plant1Name { get; set; }
+        // Plant grown current year -2
+        public String Plant2Name { get; set; }
     }
 }

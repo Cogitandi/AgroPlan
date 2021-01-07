@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace AgroPlan.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IFieldRepository _fieldRepository;
+        private readonly IYearPlanRepository _yearPlanRepository;
         private readonly ISeasonRepository _seasonRepository;
         private readonly IApplicationKindRepository _applicationKindRepository;
         private readonly IApplicationRepository _applicationRepository;
@@ -41,7 +43,7 @@ namespace AgroPlan.Web.Controllers
             return PartialView();
         }
 
-        public async Task<ActionResult> Manage(Guid id)
+        public ActionResult Manage(Guid id)
         {
             return View((Object)id.ToString());
         }
@@ -89,9 +91,63 @@ namespace AgroPlan.Web.Controllers
             TempData["Message"] = "Sezon " + season.GetName + " został usunięty";
             return;
         }
-        public IActionResult Summary(Guid SeasonId)
+        public async Task<IActionResult> Summary(Guid SeasonId)
         {
-            return View();
+            List<SummaryViewModel> model = new List<SummaryViewModel>();
+            var yearPlanList = await _yearPlanRepository.FindByCondition(YearPlanInclude, x => x.Season.Id == SeasonId);
+            var plantList = Season.GetPlants(yearPlanList);
+
+            #region Plants
+            var plantsSummary = plantList.Select(x => new SummaryViewModel()
+            {
+                Name = x.Name,
+                Value = YearPlan.GetAreaByPlant(yearPlanList, x.Id)/100.0 + " ha",
+            });
+            var withoutPlantArea = new SummaryViewModel()
+            {
+                Name = "Nie zaplanowano",
+                Value = YearPlan.GetAreaWithoutPlant(yearPlanList) / 100.0 + " ha",
+            };
+            #endregion
+
+            var EfaArea = new SummaryViewModel()
+            {
+                Name = "EFA",
+                Value = YearPlan.GetEfaArea(yearPlanList) + " ha",
+            };
+
+            #region Applications
+            var applicationList = await _applicationRepository.FindByCondition(ApplicationInclude, x => x.Season.Id == SeasonId);
+            var ApplicationsSummary = applicationList.Select(x => new SummaryViewModel()
+            {
+                Name = "wniosek - " + x.ApplicationKind.Name,
+                Value = Application.GetApplicationArea(x.ParcelApplications)/100.0 + " ha",
+            });
+            #endregion
+
+            model.AddRange(plantsSummary);
+            model.Add(EfaArea);
+            model.AddRange(ApplicationsSummary);
+            if (withoutPlantArea.Value != 0 + " ha")
+            {
+                model.Add(withoutPlantArea);
+            }
+            
+            return View(model);
+        }
+        public async Task<IActionResult> Raport(Guid SeasonId)
+        {
+            var yearPlans = await _yearPlanRepository.FindByCondition(YearPlanInclude, x => x.Season.Id == SeasonId);
+            var parcels = yearPlans.SelectMany(x => x.Field.Parcels);
+            var model = parcels.Select(x => new RaportViewModel()
+            {
+                FieldName = x.Field.Name +" ["+Field.GetTotalArea(x.Field.Parcels)/100.0+" ha]",
+                ParcelNumber = x.Number,
+                ParcelArea = x.CultivatedArea/100.0,
+                PlantName = YearPlan.GetPlantNameForField(yearPlans, x.Field.Id),
+            });
+
+            return View(model);
         }
         // Validation
         [AcceptVerbs("GET", "POST")]
@@ -111,17 +167,26 @@ namespace AgroPlan.Web.Controllers
                 arg => arg.Include(x => x.User);
 
 
-        public SeasonController(UserManager<ApplicationUser> userManager,
-            IFieldRepository fieldRepository, 
-            ISeasonRepository seasonRepository,
-            IApplicationKindRepository applicationKindRepository,
-            IApplicationRepository applicationRepository)
+
+        public SeasonController(UserManager<ApplicationUser> userManager, IFieldRepository fieldRepository, IYearPlanRepository yearPlanRepository, ISeasonRepository seasonRepository, IApplicationKindRepository applicationKindRepository, IApplicationRepository applicationRepository)
         {
             _userManager = userManager;
             _fieldRepository = fieldRepository;
+            _yearPlanRepository = yearPlanRepository;
             _seasonRepository = seasonRepository;
             _applicationKindRepository = applicationKindRepository;
             _applicationRepository = applicationRepository;
         }
+
+        private Func<DbSet<YearPlan>, IQueryable<YearPlan>> YearPlanInclude =
+                arg => arg.Include(x => x.Field)
+                .ThenInclude(y => y.Parcels)
+                .Include(x => x.Plant)
+                .Include(x => x.Season);
+        private Func<DbSet<Application>, IQueryable<Application>> ApplicationInclude =
+                arg => arg.Include(x=>x.ApplicationKind)
+                .Include(x => x.Season)
+                .Include(x => x.ParcelApplications)
+                .ThenInclude(x => x.Parcel);
     }
 }

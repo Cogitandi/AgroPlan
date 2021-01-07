@@ -1,0 +1,68 @@
+﻿@model AgroPlan.Web.Models.Treatment.TreatmentDetailViewModel
+
+<div class="modal-body mx-3">
+    <form asp-action="Create" id="createForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Date" class="control-label"></label>
+            <input asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FieldId" class="control-label"></label>
+            <select class="form-control" asp-items="@ViewBag.FieldList" asp-for="FieldId">
+            </select>
+            <span asp-validation-for="FieldId" class="text-danger"></span>
+            <div id="parcels"></div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Notes" class="control-label"></label>
+            <textarea class="form-control" asp-for="Notes" rows="3"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TreatmentKindId" class="control-label"></label>
+            <select class="form-control" asp-items="@ViewBag.TreatmentKindList" asp-for="TreatmentKindId">
+            </select>
+            <span asp-validation-for="TreatmentKindId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SprayingId" class="control-label"></label>
+            <select class="form-control" asp-items="@ViewBag.SprayingList" asp-for="SprayingId">
+            </select>
+            <span asp-validation-for="SprayingId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FertilizerId" class="control-label"></label>
+            <select class="form-control" asp-items="@ViewBag.FertilizerList" asp-for="FertilizerId">
+            </select>
+            <span asp-validation-for="FertilizerId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DosePerHa" class="control-label"></label>
+            <input asp-for="DosePerHa" class="form-control" />
+            <span asp-validation-for="DosePerHa" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Dodaj" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    var formName = "#createForm";
+
+    $('#FieldId').change(function () {
+        var id = $(this).val();
+    $.ajax({
+        async: true,
+        data: 'fieldId='+id,
+        type: "POST",
+        url: '@Url.Action("GetParcels")',
+        success: function(partialView) {
+            $(formName +' #parcels').html(partialView);
+        }
+    });
+});
+</script>
