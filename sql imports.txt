@@ -1,0 +1,39 @@
+insert into ChemicalElements values
+(newid(),'N'),
+(newid(),'P'),
+(newid(),'K'),
+(newid(),'Ca'),
+(newid(),'Mg'),
+(newid(),'S'),
+(newid(),'B');
+
+insert into Plants values
+(newid(),'pszenica ozima',1),
+(newid(),'pszenica ozima',1),
+(newid(),'proso',0),
+(newid(),'kukurydza',1),
+(newid(),'jęczmień jary',0);
+
+insert into ApplicationKinds values
+(newid(),'ARiMR'),
+(newid(),'Gmina');
+
+insert into SprayingProducts values
+(newid(), 'Miedzian 50 WP'),
+(newid(), 'Mospilan 20 SP'),
+(newid(), 'Granstar 75 WG'),
+(newid(), 'Lontrel 300 SL'),
+(newid(), 'Navigator 360 SL');
+
+insert into ContentUnits values
+(newid(), 'Mililitr' ,'ml'),
+(newid(), 'Litr' ,'L'),
+(newid(), 'Kilogram' ,'Kg'),
+(newid(), 'Gram' ,'g');
+
+insert into TreatmentKinds values
+(newid(), 'Siew'),
+(newid(), 'Oprysk'),
+(newid(), 'Nawożenie'),
+(newid(), 'Zabieg uprawowy');
+
