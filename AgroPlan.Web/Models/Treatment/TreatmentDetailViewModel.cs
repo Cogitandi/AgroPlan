@@ -30,7 +30,7 @@ namespace AgroPlan.Web.Models.Treatment
         public Guid Id { get; set; }
         [DisplayName("Numer")]
         public String Number { get; set; }
-        [DisplayName("Powierzchnia")]
+        [DisplayName("Powierzchnia [ar]")]
         public String Area { get; set; }
     }
 }

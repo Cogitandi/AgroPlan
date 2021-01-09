@@ -97,7 +97,7 @@ namespace AgroPlan.Web.Controllers
             };
             await _sprayingRepositoryWrapper.SprayingMixtureRepository.Add(sprayingMixture);
             
-            TempData["Message"] = "Dodano nową mieszanine: " + sprayingMixture.Name;
+            TempData["Message"] = "Dodano nową mieszaninę: " + sprayingMixture.Name;
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
